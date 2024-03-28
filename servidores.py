@@ -115,7 +115,6 @@ class ServidorUDP():
             mensagem_codificada = str.encode(mensagem)
             self.socket_servidor.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
             self.socket_servidor.sendto(mensagem_codificada, ('<broadcast>', self.porta))
-            print("Mensagem enviada por broadcast.")
         except socket.error as e:
             print("[❌ Erro ao enviar dados: %s]" % str(e))
     
@@ -147,3 +146,4 @@ class ServidorUDP():
         self.maquina = maquina
         self.porta = porta
         self.socket_servidor = self.instanciarSocket(self.familia)
+        threading.Thread(target = self.receberClientes).start()

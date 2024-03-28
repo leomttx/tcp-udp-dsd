@@ -1,5 +1,5 @@
 import base64, sys, datetime
-from servidores import ServidorTCP
+from servidores import ServidorTCP, ServidorUDP
 
 def nomeDeUmaNovaImagem(nome_do_cliente):
     agora = datetime.datetime.now()
@@ -24,12 +24,24 @@ if __name__ == "__main__":
 MAQUINA = sys.argv[1]
 FILA = sys.argv[2]
 
+log = ServidorUDP("IPV4", "localhost", 4321)
 
+log.enviarBytesPorBroadcast("Instanciando objeto ServidorTCP()...")
 servidor = ServidorTCP("ipv4", MAQUINA, 1234, 2048, FILA)
+log.enviarBytesPorBroadcast("Objeto ServidorTCP() instanciado.")
+
+log.enviarBytesPorBroadcast("ServidorTCP() aguardando por three-way handshankes...")
 while True:
     servidor.aceitarConexao()
+    log.enviarBytesPorBroadcast("Novo three-way handshake!")
     nome_do_cliente = servidor.receberDados()
+    log.enviarBytesPorBroadcast(f"Nome: {nome_do_cliente}.")
     base64_recebido = receberBase64PorPartes(servidor)
-    string_do_base64 = base64.b64decode(base64_recebido) 
+    log.enviarBytesPorBroadcast("Novos bytes em formato base64 recebidos...")
+    string_do_base64 = base64.b64decode(base64_recebido)
+    log.enviarBytesPorBroadcast("Bytes em formato base64 decodificados!")
     resultado = open('imagens/' + nomeDeUmaNovaImagem(nome_do_cliente), 'wb')
+    log.enviarBytesPorBroadcast("Tentando criar nova imagem...")
+    log.enviarBytesPorBroadcast("Escrevendo dados decodificados na imagem...")
     resultado.write(string_do_base64)
+    log.enviarBytesPorBroadcast("Imagem gerada!")

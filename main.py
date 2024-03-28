@@ -1,5 +1,5 @@
 import sys, random, base64
-from clientes import ClienteTCP
+from clientes import *
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
@@ -13,7 +13,8 @@ ENDERECO_IP = sys.argv[2]
 eh_log = random.choice([True, False])
 
 if eh_log:
-    pass
+    clienteudp = ClienteUDP("ipv4", ENDERECO_IP, 4321)
+    clienteudp.receberMensagensEmBroadcast()
 else:
     clientetcp = ClienteTCP("ipv4", ENDERECO_IP, 1234, 2048)
     clientetcp.conectarAoServidor()
