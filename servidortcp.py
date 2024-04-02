@@ -1,4 +1,4 @@
-import base64, sys, datetime
+import base64, sys, datetime, threading
 from servidores import ServidorTCP, ServidorUDP
 
 def nomeDeUmaNovaImagem(nome_do_cliente):
@@ -24,14 +24,12 @@ if __name__ == "__main__":
 MAQUINA = sys.argv[1]
 FILA = sys.argv[2]
 
-log = ServidorUDP("IPV4", "localhost", 4321)
-
-log.enviarBytesPorBroadcast("Instanciando objeto ServidorTCP()...")
 servidor = ServidorTCP("ipv4", MAQUINA, 1234, 2048, FILA)
-log.enviarBytesPorBroadcast("Objeto ServidorTCP() instanciado.")
+log = ServidorUDP("ipv4", MAQUINA, 4321)
+threading.Thread(target = log.receberClientes).start()
 
-log.enviarBytesPorBroadcast("ServidorTCP() aguardando por three-way handshankes...")
 while True:
+    log.enviarBytesPorBroadcast("Humpf, coff, cof")
     servidor.aceitarConexao()
     log.enviarBytesPorBroadcast("Novo three-way handshake!")
     nome_do_cliente = servidor.receberDados()

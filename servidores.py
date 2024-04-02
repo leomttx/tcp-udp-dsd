@@ -97,18 +97,11 @@ class ServidorTCP():
         self.habilitarModoDeEscuta(self.fila)
 
 class ServidorUDP():
-    def receberDadosCliente(self, dados, endereco):
-        print(f'Dados recebidos de {endereco}: {dados}')
-
     def receberClientes(self):
         while True:
             dados, endereco = self.socket_servidor.recvfrom(1024)
             if endereco not in [cli[1] for cli in self.clientes_conectados]:
-                print(f'Novo cliente conectado: {endereco}')
                 self.clientes_conectados.append((dados, endereco))
-                threading.Thread(target = self.receberDadosCliente, args = (dados, endereco)).start()
-            else:
-                threading.Thread(target = self.receberDadosCliente, args = (dados, endereco)).start()
 
     def enviarBytesPorBroadcast(self, mensagem):
         try: 
@@ -145,5 +138,7 @@ class ServidorUDP():
         self.familia = familia
         self.maquina = maquina
         self.porta = porta
+        self.clientes_conectados = []
         self.socket_servidor = self.instanciarSocket(self.familia)
+        self.configurarSocketParaEscutarNoEndereco(maquina, porta)
         threading.Thread(target = self.receberClientes).start()

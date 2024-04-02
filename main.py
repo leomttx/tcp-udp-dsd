@@ -10,12 +10,15 @@ if __name__ == "__main__":
 NOME = sys.argv[1]
 ENDERECO_IP = sys.argv[2]
 
-eh_log = random.choice([True, False])
+#eh_log = random.choice([True, False])
+
+eh_log = True
 
 if eh_log:
-    clienteudp = ClienteUDP("ipv4", ENDERECO_IP, 4321)
+    clienteudp = ClienteUDP("ipv4", "localhost", 4321)
     clienteudp.receberMensagensEmBroadcast()
 else:
+    print("Não é")
     clientetcp = ClienteTCP("ipv4", ENDERECO_IP, 1234, 2048)
     clientetcp.conectarAoServidor()
     clientetcp.enviarDados(NOME)
