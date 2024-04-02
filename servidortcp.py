@@ -1,9 +1,6 @@
 import base64, sys, datetime, threading
 from servidores import ServidorTCP, ServidorUDP
-
-def nomeDeUmaNovaImagem(nome_do_cliente):
-    agora = datetime.datetime.now()
-    return str(nome_do_cliente + " ({}h{}m{}s).png".format(agora.hour, agora.minute, agora.second))
+from utils import nomeDeUmaNovaImagem
 
 def receberBase64PorPartes(self):
     receptor_do_base64 = b''
@@ -17,7 +14,7 @@ def receberBase64PorPartes(self):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("Uso: python3 servidortcp.py <maquina> <tamanho_da_fila>")
+        print(f"Uso: python3 {sys.argv[0]} <maquina> <tamanho_da_fila>")
         sys.exit(1)
 
 
