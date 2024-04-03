@@ -13,9 +13,11 @@ ENDERECO_IP = sys.argv[2]
 eh_log = random.choice([True, False])
 
 if eh_log:
+    input("Seu programa está configurado para ser um log com UDP. Pressione ENTER para continuar...")
     clienteudp = ClienteUDP("ipv4", "localhost", 4321)
     clienteudp.receberMensagensEmBroadcast()
 else:
+    input("Seu programa está configurado para ser um cliente com TCP. Antes de continuar, certifique-se de ter baixado a imagem. Pressione ENTER...")
     clientetcp = ClienteTCP("ipv4", ENDERECO_IP, 1234, 2048)
     clientetcp.conectarAoServidor()
     clientetcp.enviarDados(NOME)
