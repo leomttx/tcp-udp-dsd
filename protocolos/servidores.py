@@ -21,6 +21,16 @@ class ServidorTCP():
         else:
             print("[❌ Nenhuma conexão ativa para receber dados]")
         return None
+    
+    def receberBase64PorPartes(self):
+        receptor_do_base64 = b''
+        while True:
+            fragmento = self.receberBase64()
+            if not fragmento:
+                break
+            receptor_do_base64 += fragmento
+        base64_completo = receptor_do_base64
+        return base64_completo
 
     def receberDados(self):
         if self.socket_cliente:

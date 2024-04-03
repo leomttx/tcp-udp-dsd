@@ -1,5 +1,5 @@
 import sys, random, base64
-from clientes import *
+from protocolos.clientes import *
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
