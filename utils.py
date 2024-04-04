@@ -1,4 +1,4 @@
-import socket
+import socket, datetime
 
 def log(mensagem):
     print(mensagem)
@@ -79,3 +79,7 @@ def fecharSocket(socket_):
 
 def conectarSocket(socket_, host, porta):
     socket_.connect((host, porta))
+
+def nomeDeUmaNovaImagem(nome_do_cliente):
+    agora = datetime.datetime.now()
+    return str(nome_do_cliente + " ({}h{}m{}s).png".format(agora.hour, agora.minute, agora.second))
