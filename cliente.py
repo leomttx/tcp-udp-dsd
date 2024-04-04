@@ -1,9 +1,9 @@
 import sys, random, base64
-from clientes import *
+from protocolos.clientes import *
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("Uso: python3 main.py <seu-nome> <endereco-ip>")
+        print(f"Uso: python3 {sys.argv[0]} <seu-nome> <endereco-ip>")
         sys.exit(1)
 
 
@@ -13,9 +13,11 @@ ENDERECO_IP = sys.argv[2]
 eh_log = random.choice([True, False])
 
 if eh_log:
-    clienteudp = ClienteUDP("ipv4", ENDERECO_IP, 4321)
+    input("Seu programa está configurado para ser um log com UDP. Pressione ENTER para continuar...")
+    clienteudp = ClienteUDP("ipv4", "localhost", 4321)
     clienteudp.receberMensagensEmBroadcast()
 else:
+    input("Seu programa está configurado para ser um cliente com TCP. Antes de continuar, certifique-se de ter baixado a imagem. Pressione ENTER...")
     clientetcp = ClienteTCP("ipv4", ENDERECO_IP, 1234, 2048)
     clientetcp.conectarAoServidor()
     clientetcp.enviarDados(NOME)

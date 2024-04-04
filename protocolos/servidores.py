@@ -21,6 +21,16 @@ class ServidorTCP():
         else:
             print("[❌ Nenhuma conexão ativa para receber dados]")
         return None
+    
+    def receberBase64PorPartes(self):
+        receptor_do_base64 = b''
+        while True:
+            fragmento = self.receberBase64()
+            if not fragmento:
+                break
+            receptor_do_base64 += fragmento
+        base64_completo = receptor_do_base64
+        return base64_completo
 
     def receberDados(self):
         if self.socket_cliente:
@@ -83,6 +93,7 @@ class ServidorTCP():
         familia_de_sockets = utils.getFamilia(familia)
         instancia = socket.socket(familia_de_sockets, socket.SOCK_STREAM)
         return instancia
+    
 
     def __init__(self, familia, maquina, porta, buffer, fila):
         self.familia = familia
@@ -97,18 +108,11 @@ class ServidorTCP():
         self.habilitarModoDeEscuta(self.fila)
 
 class ServidorUDP():
-    def receberDadosCliente(self, dados, endereco):
-        print(f'Dados recebidos de {endereco}: {dados}')
-
     def receberClientes(self):
         while True:
             dados, endereco = self.socket_servidor.recvfrom(1024)
             if endereco not in [cli[1] for cli in self.clientes_conectados]:
-                print(f'Novo cliente conectado: {endereco}')
                 self.clientes_conectados.append((dados, endereco))
-                threading.Thread(target = self.receberDadosCliente, args = (dados, endereco)).start()
-            else:
-                threading.Thread(target = self.receberDadosCliente, args = (dados, endereco)).start()
 
     def enviarBytesPorBroadcast(self, mensagem):
         try: 
@@ -145,5 +149,7 @@ class ServidorUDP():
         self.familia = familia
         self.maquina = maquina
         self.porta = porta
+        self.clientes_conectados = []
         self.socket_servidor = self.instanciarSocket(self.familia)
+        self.configurarSocketParaEscutarNoEndereco(maquina, porta)
         threading.Thread(target = self.receberClientes).start()
